@@ -2,31 +2,32 @@
 
 //Khai báo chân điều khiển động cơ bánh xe
 // Motor 1
-#define in1_L298N_no1 4
-#define in2_L298N_no1 5
+#define in1_L298N_no1 22
+#define in2_L298N_no1 24
 // Motor 2
-#define in3_L298N_no1 6
-#define in4_L298N_no1 7
+#define in3_L298N_no1 26
+#define in4_L298N_no1 28
 // Motor 3
-#define in1_L298N_no2 8
-#define in2_L298N_no2 9
+#define in1_L298N_no2 30
+#define in2_L298N_no2 32
 // Motor 4
-#define in3_L298N_no2 10
-#define in4_L298N_no2 11
+#define in3_L298N_no2 34
+#define in4_L298N_no2 36
 // PWM
 #define ENA 3
 #define ENB 2
 
 //Khai báo chân điều khiển động cơ lấy bóng
-#define ball_in1 30
-#define ball_in2 32
-#define ENC 45
+#define ball_in1 38
+#define ball_in2 40
+#define ENC 4
 
 //Khai báo chân điều khiển động cơ bắn bóng
-#define shoot_in1 22
-#define shoot_in2 24
-#define shoot_in3 26
-#define shoot_in4 28
+#define shoot_in1 42
+#define shoot_in2 44
+#define shoot_in3 46
+#define shoot_in4 48
+#define END 5
 
 //Joystick
 #define ANALOG_X_PIN A2
@@ -37,8 +38,8 @@
 #define ANALOG_Y_CORRECTION 128
 
 //Servo
-#define Servo_Pin_1 44
-#define Servo_Pin_2 46
+#define Servo_Pin_1 6
+#define Servo_Pin_2 7
 
 // ==== Nút bấm ====
 const int button_Pin_1 = 23; // Lấy bóng
@@ -172,11 +173,12 @@ void Ball_Took(bool m1_in1, bool m1_in2, int speed) {
 }
 
 //Bắn bóng
-void Ball_Shoot(bool m1_in1, bool m1_in2, bool m1_in3, bool m1_in4) {
+void Ball_Shoot(bool m1_in1, bool m1_in2, bool m1_in3, bool m1_in4, int speed) {
   digitalWrite(shoot_in1, m1_in1);
   digitalWrite(shoot_in2, m1_in2);
   digitalWrite(shoot_in3, m1_in3);
   digitalWrite(shoot_in4, m1_in4);
+  analogWrite(END, speed);
 }
 
 // Setup động cơ di chuyển 
@@ -211,6 +213,7 @@ void Motor_Ball_Shoot_Setup(){
   pinMode(shoot_in2, OUTPUT);
   pinMode(shoot_in3, OUTPUT);
   pinMode(shoot_in4, OUTPUT);
+  pinMode(END, OUTPUT);
 }
 
 // Setup nút bấm  
@@ -333,10 +336,10 @@ void Joystick_Action_Control(){
 void Button_Action_Press(){
   //Nút nhấn
   if (!digitalRead(button_Pin_1)) {
-    Ball_Took(1, 0, 150); // Lấy bóng
+    Ball_Took(1, 0, 100); // Lấy bóng
   }
   if (!digitalRead(button_Pin_2)) {
-    Ball_Shoot(1, 0, 1, 0); // Bắn bóng
+    Ball_Shoot(1, 0, 1, 0, 150); // Bắn bóng
   }
   if (!digitalRead(button_Pin_3)) {
     servo1.write(30); //Servo 1 mở
@@ -383,9 +386,8 @@ void setup() {
   Motor_Ball_Shoot_Setup();
   Servo_Setup();
   Joystick_Setup();
-  
-}
 
+}
 
 //Loop chính
 void loop() {
