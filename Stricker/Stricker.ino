@@ -14,8 +14,8 @@
 #define in3_L298N_no2 34
 #define in4_L298N_no2 36
 // PWM
-#define ENA 3
-#define ENB 2
+#define ENA 2
+#define ENB 3
 
 //Khai báo chân điều khiển động cơ lấy bóng
 #define ball_in1 38
