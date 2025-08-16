@@ -179,10 +179,8 @@ void Ball_Shoot(bool m1_in1, bool m1_in2, bool m1_in3, bool m1_in4) {
   digitalWrite(shoot_in4, m1_in4);
 }
 
-//Setup
-void setup() {
-  Serial.begin(115200);
-
+// Setup động cơ di chuyển 
+void Motor_Move_Setup(){
   // Setup chân motor
   pinMode(in1_L298N_no1, OUTPUT);
   pinMode(in2_L298N_no1, OUTPUT);
@@ -196,18 +194,27 @@ void setup() {
   // PWM
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
+}
 
+// Setup động cơ lấy bóng 
+void Motor_Ball_Took_Setup(){
   // Ball
   pinMode(ball_in1, OUTPUT);
   pinMode(ball_in2, OUTPUT);
   pinMode(ENC, OUTPUT);
+}
 
+// Setup động cơ bắn bóng 
+void Motor_Ball_Shoot_Setup(){
   // Shoot
   pinMode(shoot_in1, OUTPUT);
   pinMode(shoot_in2, OUTPUT);
   pinMode(shoot_in3, OUTPUT);
   pinMode(shoot_in4, OUTPUT);
+}
 
+// Setup nút bấm  
+void Button_Setup(){
   // Buttons
   pinMode(button_Pin_1, INPUT_PULLUP);
   pinMode(button_Pin_2, INPUT_PULLUP);
@@ -219,16 +226,17 @@ void setup() {
   pinMode(button_Pin_8, INPUT_PULLUP);
   pinMode(button_Pin_9, INPUT_PULLUP);
   pinMode(button_Pin_10, INPUT_PULLUP);
+}
 
+//Setup servo
+void Servo_Setup(){
   // Servo
   servo1.attach(Servo_Pin_1);
   servo2.attach(Servo_Pin_2);
-
-  Joystick_Setup();
 }
 
-//Loop chính
-void loop() {
+//Điều khiển chuyển động với Joystick
+void Joystick_Action_Control(){
   int x = readAnalogAxisLevel(ANALOG_X_PIN) - ANALOG_X_CORRECTION;
   int y = readAnalogAxisLevel(ANALOG_Y_PIN) - ANALOG_Y_CORRECTION;
 
@@ -319,7 +327,10 @@ void loop() {
       180, 180       // Speeds
     );
   }
-  
+}
+
+//Điều khiển với nút nhấn
+void Button_Action_Press(){
   //Nút nhấn
   if (!digitalRead(button_Pin_1)) {
     Ball_Took(1, 0, 150); // Lấy bóng
@@ -328,10 +339,14 @@ void loop() {
     Ball_Shoot(1, 0, 1, 0); // Bắn bóng
   }
   if (!digitalRead(button_Pin_3)) {
-    servo1.write(90);
+    servo1.write(30); //Servo 1 mở
+    delay(10);
+    servo1.write(0); //Servo 1 đóng
   }
   if (!digitalRead(button_Pin_4)) {
-    servo2.write(90);
+    servo2.write(30); //Servo 2 mở
+    delay(10);
+    servo2.write(0); //Servo 2 đóng
   }
   if (!digitalRead(button_Pin_5)) {
     Serial.println(" -> Đi Thẳng");
@@ -357,4 +372,23 @@ void loop() {
     Serial.println(" -> Quay Trái");
     moveMotors(0, 1, 1, 0, 0, 1, 1, 0, 80, 80); // Quay trái
   }
+}
+
+//Setup
+void setup() {
+  Serial.begin(115200);
+  
+  Motor_Move_Setup();
+  Motor_Ball_Took_Setup();
+  Motor_Ball_Shoot_Setup();
+  Servo_Setup();
+  Joystick_Setup();
+  
+}
+
+
+//Loop chính
+void loop() {
+  Joystick_Action_Control();
+  Button_Action_Press();
 }
