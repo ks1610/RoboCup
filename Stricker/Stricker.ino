@@ -24,6 +24,8 @@
 
 //Khai báo chân Relay bật tắt động cơ bắn bóng 
 const int Relay_Shoot = 42;
+const int Relay_Laze = 46;
+
 
 //Servo đóng mở 1
 #define Servo_Pin_1 6
@@ -57,6 +59,7 @@ void Motor_Ball_Shoot_Setup(){
 
 void Relay_Setup(){
   pinMode(Relay_Shoot, OUTPUT)
+  pinMode(Relay_Laze, OUTPUT)
 }
 
 //Điều khiển động cơ bánh xe
@@ -107,6 +110,9 @@ void loop(){
 
   //Bắn bóng
   digitalWrite(Relay_Shoot, HIGH);
+
+  //Laze 
+  digitalWrite(Relay_Laze, HIGH);
 
   //Đóng mở servo 1
   servo1.write(90); //Servo 1 đóng
