@@ -106,6 +106,13 @@
 // Shooting relay
 const int Relay_Shoot = 42;
 
+//Servo đóng mở 1
+#define Servo_Pin_1 6
+//Servo đóng mở 2
+#define Servo_Pin_2 7
+
+Servo servo1, servo2;
+
 // ===== Serial buffer =====
 String inputString = "";
 bool stringComplete = false;
@@ -163,6 +170,12 @@ void Ball_Shoot(bool in1, bool in2, int speed) {
   analogWrite(END, speed);
 }
 
+//Setup servo
+void Servo_Setup(){
+  // Servo
+  servo1.attach(Servo_Pin_1);
+  servo2.attach(Servo_Pin_2);
+}
 
 // ==== Setup ====
 void setup() {
@@ -170,6 +183,7 @@ void setup() {
   Motor_Move_Setup();
   Motor_Ball_Shoot_Setup();
   Relay_Setup();
+  Servo_Setup();
   Serial.println("Robot Ready with Joystick + Button control...");
 }
 
@@ -214,10 +228,14 @@ void handleButton(char cmd) {
       break;
 
     case 'C':  // Servo 1
+      servo1.write(0); //Servo 1 mở
+      servo2.write(90); //Servo 2 đóng
       Serial.println("Servo 1 triggered");
       break;
 
     case 'D':  // Servo 2
+      servo1.write(90); //Servo 1 đóng
+      servo2.write(0); //Servo 2 mở
       Serial.println("Servo 2 triggered");
       break;
 
